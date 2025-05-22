@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CI/CD Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    h1 {
+      color: #333;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 0;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #metrics {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      width: fit-content;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the CI/CD Demo</h1>
+  <p>This page is served by Express.js and automatically deployed.</p>
+
+  <button onclick="fetchHello()">Say Hello</button>
+  <p id="helloMessage"></p>
+
+  <button onclick="fetchMetrics()">Show Metrics</button>
+  <div id="metrics"></div>
+
+  <script>
+    window.onload = () => {
+    fetch('/api/visit')
+      .catch(err => console.error('Visit increment error:', err));
+    };
+
+  function fetchHello() {
+    fetch('/api/hello')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('helloMessage').textContent = data.message;
+      })
+      .catch(err => console.error('Error:', err));
+    }
+
+  function fetchMetrics() {
+    fetch('/api/metrics')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('metrics').innerHTML = `
+          <strong>Server Time:</strong> ${data.serverTime}<br>
+          <strong>Total Visits:</strong> ${data.totalVisits}<br>
+          <strong>Hello API Calls:</strong> ${data.helloApiCalls}
+        `;
+      })
+      .catch(err => console.error('Error fetching metrics:', err));
+    }
+  </script>
+</body>
+</html>
